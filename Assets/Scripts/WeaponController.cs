@@ -14,7 +14,6 @@ public class WeaponController : MonoBehaviour
 
     public int AmmoInMagazine { get; private set; }
     public bool IsReloading { get; private set; }
-
     private float nextShotTime;
 
     private void Awake()
@@ -26,10 +25,11 @@ public class WeaponController : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.R))
+        if (Input.GetKeyDown(KeyCode.R) || TouchInput.ConsumeReload())
             StartReload();
 
-        if (Input.GetMouseButton(0) && Cursor.lockState == CursorLockMode.Locked)
+        bool desktopFire = Input.GetMouseButton(0) && Cursor.lockState == CursorLockMode.Locked;
+        if (desktopFire || TouchInput.FireHeld)
             Fire();
     }
 
@@ -45,7 +45,6 @@ public class WeaponController : MonoBehaviour
 
         nextShotTime = Time.time + 1f / Mathf.Max(0.1f, shotsPerSecond);
         AmmoInMagazine--;
-
         if (!aimCamera) return;
 
         Ray ray = aimCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
@@ -67,16 +66,11 @@ public class WeaponController : MonoBehaviour
     {
         IsReloading = true;
         yield return new WaitForSeconds(reloadDuration);
-
-        int needed = magazineSize - AmmoInMagazine;
-        int loaded = Mathf.Min(needed, reserveAmmo);
+        int loaded = Mathf.Min(magazineSize - AmmoInMagazine, reserveAmmo);
         AmmoInMagazine += loaded;
         reserveAmmo -= loaded;
         IsReloading = false;
     }
 
-    public void AddAmmo(int amount)
-    {
-        reserveAmmo += Mathf.Max(0, amount);
-    }
+    public void AddAmmo(int amount) => reserveAmmo += Mathf.Max(0, amount);
 }
