@@ -84,6 +84,16 @@ public class MatchManager : MonoBehaviour
             EndMatch(true);
     }
 
+    /// <summary>Register a bot created by a runtime scene bootstrap or custom spawner.</summary>
+    public void RegisterSpawnedBot(GameObject botObject)
+    {
+        if (!botObject) return;
+        BotAI bot = botObject.GetComponent<BotAI>();
+        if (bot && player)
+            bot.target = player;
+        spawnedBots++;
+    }
+
     public void SpawnBots()
     {
         if (!botPrefab)
