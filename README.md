@@ -19,6 +19,14 @@ NEOROYALE is an original third-person 3D battle-royale **prototype** written in 
 - Match-status overlay (timer, health, ammo, bot count)
 - Runtime quality settings for frame rate and graphics quality
 
+## Quick-start graybox scene
+
+For a fast desktop prototype test, add `PrototypeSceneBootstrap.cs` to the project, create a new empty scene object, and attach the `PrototypeSceneBootstrap` component. Press Play. It creates a basic player, camera, placeholder arena, safe zone, timer, HUD, and a configurable group of simple enemy bots at runtime.
+
+- Desktop controls: WASD to move, mouse to look, left-click to fire, R to reload, Shift to sprint, Space to jump. Click the Game view to lock the cursor.
+- The bootstrap creates simple primitive shapes only; it does not provide polished character models, animation, sound, a finished mobile touch Canvas, or online multiplayer.
+- This is a quick-start/testing helper, not a substitute for building and testing the scene in Unity. It has not yet been compiled or play-tested in Unity.
+
 ## Requirements
 
 - Unity 2022.3 LTS or newer
@@ -88,6 +96,7 @@ Online matchmaking, networking, server-authoritative combat, anti-cheat, account
 ```
 Assets/Scripts/
   BattleMapGenerator.cs
+  PrototypeSceneBootstrap.cs
   BotAI.cs
   Health.cs
   HUD.cs
