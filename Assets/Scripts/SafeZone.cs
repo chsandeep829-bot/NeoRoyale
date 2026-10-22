@@ -39,7 +39,6 @@ public class SafeZone : MonoBehaviour
                 health.TakeDamage(damagePerSecond * Time.deltaTime);
         }
 
-        if (t >= 1f) running = false;
     }
 
     public void BeginShrinking()
