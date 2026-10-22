@@ -15,6 +15,7 @@ NEOROYALE is an original third-person 3D battle-royale **prototype** written in 
 - Configurable loot spawning
 - Runtime placeholder arena generator (ground, boundary walls, buildings and cover)
 - Bot spawning and local victory/defeat match loop
+- Configurable match timer utility
 - Basic on-screen HUD
 
 ## Requirements
@@ -85,6 +86,7 @@ Assets/Scripts/
   HUD.cs
   LootSpawner.cs
   MatchManager.cs
+  MatchTimer.cs
   Pickup.cs
   PlayerController.cs
   SafeZone.cs
