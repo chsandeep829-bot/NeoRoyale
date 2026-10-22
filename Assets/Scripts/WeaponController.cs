@@ -48,9 +48,30 @@ public class WeaponController : MonoBehaviour
         if (!aimCamera) return;
 
         Ray ray = aimCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
-        if (Physics.Raycast(ray, out RaycastHit hit, range, hitMask, QueryTriggerInteraction.Ignore))
+        // A third-person camera can sit behind the player capsule. Ignore our own
+        // colliders, but let the nearest other collider block or receive the shot.
+        RaycastHit[] hits = Physics.RaycastAll(ray, range, hitMask, QueryTriggerInteraction.Ignore);
+        RaycastHit nearestHit = default;
+        bool foundHit = false;
+        float nearestDistance = float.MaxValue;
+
+        foreach (RaycastHit candidate in hits)
         {
-            Health target = hit.collider.GetComponentInParent<Health>();
+            Transform hitTransform = candidate.collider.transform;
+            if (hitTransform == transform || hitTransform.IsChildOf(transform))
+                continue;
+
+            if (candidate.distance < nearestDistance)
+            {
+                nearestDistance = candidate.distance;
+                nearestHit = candidate;
+                foundHit = true;
+            }
+        }
+
+        if (foundHit)
+        {
+            Health target = nearestHit.collider.GetComponentInParent<Health>();
             if (target && !target.CompareTag("Player"))
                 target.TakeDamage(damage);
         }
