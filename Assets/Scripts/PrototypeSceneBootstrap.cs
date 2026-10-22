@@ -32,11 +32,6 @@ public class PrototypeSceneBootstrap : MonoBehaviour
 
         CreateCamera();
 
-        GameObject ground = GameObject.CreatePrimitive(PrimitiveType.Plane);
-        ground.name = "NEOROYALE_Ground";
-        ground.transform.position = Vector3.zero;
-        ground.transform.localScale = new Vector3(arenaSize / 10f, 1f, arenaSize / 10f);
-
         GameObject mapObject = new GameObject("NEOROYALE_BattleMap");
         BattleMapGenerator map = mapObject.AddComponent<BattleMapGenerator>();
         map.mapSize = arenaSize;
