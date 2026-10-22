@@ -18,6 +18,10 @@ public class HUD : MonoBehaviour
 
     private void OnGUI()
     {
+        // The runtime scene builder creates the HUD before the match systems.
+        // Resolve the safe zone lazily so the HUD still displays its radius.
+        if (!safeZone) safeZone = FindFirstObjectByType<SafeZone>();
+
         if (labelStyle == null)
         {
             labelStyle = new GUIStyle(GUI.skin.label)
