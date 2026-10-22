@@ -13,6 +13,7 @@ NEOROYALE is an original third-person 3D battle-royale **prototype** written in 
 - Shrinking safe-zone damage
 - Ammo and healing pickups
 - Configurable loot spawning
+- Runtime placeholder arena generator (ground, boundary walls, buildings and cover)
 - Bot spawning and local victory/defeat match loop
 - Basic on-screen HUD
 
@@ -34,7 +35,8 @@ NEOROYALE is an original third-person 3D battle-royale **prototype** written in 
 8. For pickups, create trigger-collider objects and add `Pickup`. Set the pickup type in the Inspector.
 9. Add `MatchManager` to an empty scene object. Assign the Player and a Bot Prefab (a prefab with `Health` and `BotAI`), then set the bot count and spawn radius. Optional spawn points override random positions.
 10. Add `LootSpawner` to an empty object. Add entries for your ammo/healing pickup prefabs and set each count. Pickups need a trigger Collider and `Pickup` component.
-11. Press Play and test on PC first.
+11. Add `BattleMapGenerator` to an empty object to generate a placeholder arena at runtime. Assign optional materials in the Inspector; disable `Generate On Start` if you want to build it manually with the component context menu.
+12. Press Play and test on PC first.
 
 ## Configure Android touch UI
 
@@ -77,6 +79,7 @@ Online matchmaking, networking, server-authoritative combat, anti-cheat, account
 
 ```
 Assets/Scripts/
+  BattleMapGenerator.cs
   BotAI.cs
   Health.cs
   HUD.cs
