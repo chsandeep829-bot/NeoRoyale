@@ -16,7 +16,8 @@ NEOROYALE is an original third-person 3D battle-royale **prototype** written in 
 - Runtime placeholder arena generator (ground, boundary walls, buildings and cover)
 - Bot spawning and local victory/defeat match loop
 - Configurable match timer utility
-- Basic on-screen HUD
+- Match-status overlay (timer, health, ammo, bot count)
+- Runtime quality settings for frame rate and graphics quality
 
 ## Requirements
 
@@ -37,7 +38,9 @@ NEOROYALE is an original third-person 3D battle-royale **prototype** written in 
 9. Add `MatchManager` to an empty scene object. Assign the Player and a Bot Prefab (a prefab with `Health` and `BotAI`), then set the bot count and spawn radius. Optional spawn points override random positions.
 10. Add `LootSpawner` to an empty object. Add entries for your ammo/healing pickup prefabs and set each count. Pickups need a trigger Collider and `Pickup` component.
 11. Add `BattleMapGenerator` to an empty object to generate a placeholder arena at runtime. Assign optional materials in the Inspector; disable `Generate On Start` if you want to build it manually with the component context menu.
-12. Press Play and test on PC first.
+12. Add `MatchTimer` and `MatchStatusHUD` to scene objects to display a match clock and status overlay. Assign references where possible; the status overlay also tries to find common components automatically.
+13. Optionally add `RuntimeQualitySettings` to a scene object to set target frame rate and quality level. Test different settings on actual target devices; a requested frame rate is not guaranteed.
+14. Press Play and test on PC first.
 
 ## Configure Android touch UI
 
@@ -72,6 +75,10 @@ Touch input scripts are now included, but the Canvas must be created and wired i
 
 `MatchManager` spawns configured bots and shows a simple victory/defeat panel when the player dies or all spawned bots are defeated. The panel uses Unity's built-in immediate-mode GUI for a quick prototype; replace it with Canvas UI for a polished release. The **PLAY AGAIN** button reloads the active scene, so add the scene to Build Settings. `LootSpawner` places configured pickup prefabs at assigned spawn points or random positions within its area. These systems have been committed as source code but have not been compiled or play-tested in Unity yet.
 
+## Performance and HUD notes
+
+`MatchStatusHUD` is a prototype overlay built with Unity's immediate-mode GUI, not a final Canvas-based mobile HUD. `RuntimeQualitySettings` lets you set target frame rate, quality level, VSync behavior, and screen sleep behavior. Tune these on real devices and profile performance before release.
+
 ## Multiplayer status
 
 Online matchmaking, networking, server-authoritative combat, anti-cheat, accounts, and persistence are **not included**. Do not treat this prototype as a production-ready online game.
@@ -87,9 +94,11 @@ Assets/Scripts/
   LootSpawner.cs
   MatchManager.cs
   MatchTimer.cs
+  MatchStatusHUD.cs
   Pickup.cs
   PlayerController.cs
   SafeZone.cs
+  RuntimeQualitySettings.cs
   TouchActionButton.cs
   TouchInput.cs
   TouchLookArea.cs
