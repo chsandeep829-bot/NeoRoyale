@@ -9,7 +9,7 @@ NEOROYALE is an original third-person 3D battle-royale **prototype** written in 
 - Configurable mobile touch joystick, look area, fire, sprint, jump and reload controls
 - Health and damage
 - Hitscan weapon firing and reloading
-- Simple enemy bot that follows and attacks the player
+- Enemy bot pursuit/attack AI with optional Unity NavMeshAgent navigation
 - Shrinking safe-zone damage
 - Ammo and healing pickups
 - Configurable loot spawning
@@ -30,7 +30,7 @@ NEOROYALE is an original third-person 3D battle-royale **prototype** written in 
 3. In **Edit → Project Settings → Player → Active Input Handling**, select **Both** or **Input Manager (Old)**, then restart Unity if prompted. These scripts use Unity's legacy `Input` API alongside UI EventSystem pointer events.
 4. Create a ground plane and add colliders to the ground and cover objects.
 5. Create a capsule named `Player`, tag it `Player`, and add `CharacterController`, `Health`, `PlayerController`, `WeaponController`, and `HUD`. Assign the Main Camera to the camera fields.
-6. Create enemy capsules with colliders, `Health`, and `BotAI`. Set their `target` to the player transform (or leave it blank so the bot finds the Player tag).
+6. Create enemy capsules with colliders, `Health`, and `BotAI`. Set their `target` to the player transform (or leave it blank so the bot finds the Player tag). For better pathfinding around buildings, add a `NavMeshAgent` to each bot and bake a NavMesh using Unity's AI Navigation tools. Without a baked NavMesh, the bot uses simple direct movement and can get stuck on obstacles.
 7. Create an empty object named `SafeZone` and add `SafeZone`. Place it at the center of the playable area.
 8. For pickups, create trigger-collider objects and add `Pickup`. Set the pickup type in the Inspector.
 9. Add `MatchManager` to an empty scene object. Assign the Player and a Bot Prefab (a prefab with `Health` and `BotAI`), then set the bot count and spawn radius. Optional spawn points override random positions.
