@@ -14,6 +14,7 @@ public class MatchManager : MonoBehaviour
     [Min(0f)] public float spawnRadius = 45f;
     public Transform[] spawnPoints;
     public bool spawnBotsOnStart = true;
+    public MatchTimer matchTimer;
 
     [Header("Result Screen")]
     public bool pauseOnMatchEnd = true;
@@ -31,6 +32,7 @@ public class MatchManager : MonoBehaviour
     private void Start()
     {
         ResolvePlayer();
+        if (!matchTimer) matchTimer = FindFirstObjectByType<MatchTimer>();
         if (player && spawnBotsOnStart)
             SpawnBots();
     }
@@ -52,6 +54,14 @@ public class MatchManager : MonoBehaviour
         if (playerHealth && playerHealth.IsDead)
         {
             EndMatch(false);
+            return;
+        }
+
+        // If the configured countdown expires while the player is alive, finish the match.
+        if (!matchTimer) matchTimer = FindFirstObjectByType<MatchTimer>();
+        if (matchTimer && matchTimer.countDown && matchTimer.RemainingSeconds <= 0f)
+        {
+            EndMatch(true);
             return;
         }
 
