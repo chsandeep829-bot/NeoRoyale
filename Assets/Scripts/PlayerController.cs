@@ -26,35 +26,42 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
-        LockCursor(true);
+        if (Application.isMobilePlatform)
+            LockCursor(false);
+        else
+            LockCursor(true);
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
-            LockCursor(false);
-
-        if (Input.GetMouseButtonDown(0))
-            LockCursor(true);
-
-        if (Cursor.lockState == CursorLockMode.Locked)
+        if (!Application.isMobilePlatform)
         {
-            yaw += Input.GetAxis("Mouse X") * sensitivity;
-            pitch -= Input.GetAxis("Mouse Y") * sensitivity;
-            pitch = Mathf.Clamp(pitch, -20f, 60f);
+            if (Input.GetKeyDown(KeyCode.Escape)) LockCursor(false);
+            if (Input.GetMouseButtonDown(0)) LockCursor(true);
         }
 
-        Vector3 input = transform.right * Input.GetAxisRaw("Horizontal")
-                      + transform.forward * Input.GetAxisRaw("Vertical");
-        input = Vector3.ClampMagnitude(input, 1f);
+        Vector2 mouseLook = Vector2.zero;
+        if (Cursor.lockState == CursorLockMode.Locked)
+            mouseLook = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y")) * sensitivity;
 
-        float speed = Input.GetKey(KeyCode.LeftShift) ? sprintSpeed : walkSpeed;
+        Vector2 touchLook = TouchInput.ConsumeLookDelta();
+        yaw += mouseLook.x + touchLook.x;
+        pitch -= mouseLook.y + touchLook.y;
+        pitch = Mathf.Clamp(pitch, -20f, 60f);
+
+        Vector2 moveInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+        moveInput = Vector2.ClampMagnitude(moveInput + TouchInput.Move, 1f);
+        Vector3 input = transform.right * moveInput.x + transform.forward * moveInput.y;
+
+        bool sprinting = Input.GetKey(KeyCode.LeftShift) || TouchInput.SprintHeld;
+        float speed = sprinting ? sprintSpeed : walkSpeed;
         controller.Move(input * speed * Time.deltaTime);
 
         if (controller.isGrounded && verticalVelocity < 0f)
             verticalVelocity = -2f;
 
-        if (controller.isGrounded && Input.GetKeyDown(KeyCode.Space))
+        bool jumpPressed = Input.GetKeyDown(KeyCode.Space) || TouchInput.ConsumeJump();
+        if (controller.isGrounded && jumpPressed)
             verticalVelocity = Mathf.Sqrt(jumpHeight * -2f * gravity);
 
         verticalVelocity += gravity * Time.deltaTime;
