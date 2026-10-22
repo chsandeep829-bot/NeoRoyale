@@ -12,6 +12,8 @@ NEOROYALE is an original third-person 3D battle-royale **prototype** written in 
 - Simple enemy bot that follows and attacks the player
 - Shrinking safe-zone damage
 - Ammo and healing pickups
+- Configurable loot spawning
+- Bot spawning and local victory/defeat match loop
 - Basic on-screen HUD
 
 ## Requirements
@@ -30,7 +32,9 @@ NEOROYALE is an original third-person 3D battle-royale **prototype** written in 
 6. Create enemy capsules with colliders, `Health`, and `BotAI`. Set their `target` to the player transform (or leave it blank so the bot finds the Player tag).
 7. Create an empty object named `SafeZone` and add `SafeZone`. Place it at the center of the playable area.
 8. For pickups, create trigger-collider objects and add `Pickup`. Set the pickup type in the Inspector.
-9. Press Play and test on PC first.
+9. Add `MatchManager` to an empty scene object. Assign the Player and a Bot Prefab (a prefab with `Health` and `BotAI`), then set the bot count and spawn radius. Optional spawn points override random positions.
+10. Add `LootSpawner` to an empty object. Add entries for your ammo/healing pickup prefabs and set each count. Pickups need a trigger Collider and `Pickup` component.
+11. Press Play and test on PC first.
 
 ## Configure Android touch UI
 
@@ -61,6 +65,10 @@ NEOROYALE is an original third-person 3D battle-royale **prototype** written in 
 
 Touch input scripts are now included, but the Canvas must be created and wired in the Unity Editor. Performance tuning, UI polish, graphics settings, and device testing are still required before release.
 
+## Match-loop notes
+
+`MatchManager` spawns configured bots and shows a simple victory/defeat panel when the player dies or all spawned bots are defeated. The panel uses Unity's built-in immediate-mode GUI for a quick prototype; replace it with Canvas UI for a polished release. The **PLAY AGAIN** button reloads the active scene, so add the scene to Build Settings. `LootSpawner` places configured pickup prefabs at assigned spawn points or random positions within its area. These systems have been committed as source code but have not been compiled or play-tested in Unity yet.
+
 ## Multiplayer status
 
 Online matchmaking, networking, server-authoritative combat, anti-cheat, accounts, and persistence are **not included**. Do not treat this prototype as a production-ready online game.
@@ -72,6 +80,8 @@ Assets/Scripts/
   BotAI.cs
   Health.cs
   HUD.cs
+  LootSpawner.cs
+  MatchManager.cs
   Pickup.cs
   PlayerController.cs
   SafeZone.cs
